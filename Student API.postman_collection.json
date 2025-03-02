@@ -79,8 +79,7 @@
 						"{{base_url}}"
 					],
 					"path": [
-						"students",
-						"add"
+						"students"
 					]
 				}
 			},
