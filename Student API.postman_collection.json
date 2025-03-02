@@ -66,7 +66,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"id\": 1351123,\r\n  \"name\": \"John Doe\",\r\n  \"midterm_score\": 85,\r\n  \"final_score\": 90\r\n}\r\n",
+					"raw": "{\r\n  \"id\": 1351111,\r\n  \"name\": \"Name\",\r\n  \"midtermScore\": 85,\r\n  \"finalScore\": 90\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -74,7 +74,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/students/add",
+					"raw": "{{base_url}}/students",
 					"host": [
 						"{{base_url}}"
 					],
@@ -93,7 +93,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"id\": 1351128,\r\n  \"name\": \"Roy Adrian Updated\",\r\n  \"midtermScore\": 85,\r\n  \"finalScore\": 92\r\n}\r\n",
+					"raw": "{\r\n  \"id\": 1351111,\r\n  \"name\": \"Updated\",\r\n  \"midtermScore\": 85,\r\n  \"finalScore\": 92\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
