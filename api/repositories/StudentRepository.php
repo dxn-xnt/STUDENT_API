@@ -37,6 +37,10 @@ class StudentRepository implements IBaseRepository
 
     public function Add($entity)
     {
+        $check = $this->GetById($entity['id']);
+        if ($check) {
+            return false;
+        }
         $student = new Student();
         $student->id = $entity['id'];
         $student->name = $entity['name'];
@@ -67,9 +71,12 @@ class StudentRepository implements IBaseRepository
         return $student;
     }
 
-
-    public function Update($entity): void
+    public function Update($id, $entity): bool
     {
+        $check = $this->GetById($id);
+        if (!$check) {
+            return false;
+        }
         $query = "UPDATE {$this->table} 
               SET STUD_NAME = :name, 
                   STUD_M_SCORE = :midterm, 
@@ -87,13 +94,19 @@ class StudentRepository implements IBaseRepository
             ':status' => $entity['status']
         ];
         $this->ExecuteSqlQuery($query, $params);
+        return true;
     }
 
-    public function Delete(int $id): void
+    public function Delete(int $id): bool
     {
+        $check = $this->GetById($id);
+        if (!$check) {
+            return false;
+        }
         $query = "DELETE FROM {$this->table} WHERE STUD_ID = :id";
         $params = [':id' => $id];
         $this->ExecuteSqlQuery($query, $params);
+        return true;
     }
 
     private function ExecuteSqlQuery(string $query, array $params)
@@ -104,7 +117,6 @@ class StudentRepository implements IBaseRepository
         if (stripos($query, "SELECT") === 0) {
             return $statementObject->fetchAll(PDO::FETCH_ASSOC);
         }
-
         return null;
     }
 

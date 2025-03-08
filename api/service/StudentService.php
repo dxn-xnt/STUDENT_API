@@ -28,7 +28,11 @@ class StudentService
         $studentData['finalGrade'] = $this->calculateFinalGrade($studentData['midtermScore'], $studentData['finalScore']);
         $studentData['status'] = $this->determineStatus($studentData['finalGrade']);
 
-        return $this->studentRepository->Add($studentData);
+        $student = $this->studentRepository->Add($studentData);
+        if (!$student) {
+            return ["message" => "Student ID duplicate found."];
+        }
+        return ["message" => "Student added successfully.", "student" => $student];
     }
 
     public function getAllGrades()
@@ -41,17 +45,42 @@ class StudentService
         return $students;
     }
 
+    public function getStudent($id)
+    {
+        $student = $this->studentRepository->GetById($id);
+        if (!$student) {
+            return ["message" => "Student not found."];
+        }
+
+        $student->finalGrade = $this->calculateFinalGrade($student->midtermScore, $student->finalScore);
+        $student->status = $this->determineStatus($student->finalGrade);
+        return $student;
+    }
+
     public function updateStudent($id, $studentData)
     {
-        if (!isset($studentData['name'], $studentData['midtermScore'], $studentData['finalScore'])) {
+        if (!isset($studentData['id'], $studentData['name'], $studentData['midtermScore'], $studentData['finalScore'])) {
             throw new Exception("Invalid input: Name, Midterm Score, and Final Score are required.");
         }
 
         $studentData['id'] = $id;
         $studentData['finalGrade'] = $this->calculateFinalGrade($studentData['midtermScore'], $studentData['finalScore']);
         $studentData['status'] = $this->determineStatus($studentData['finalGrade']);
-        $this->studentRepository->Update($studentData);
+        $isUpdated = $this->studentRepository->Update($id, $studentData);
 
+        if (!$isUpdated) {
+            return ["message" => "Student not found."];
+        }
         return ["message" => "Student updated successfully.", "student" => $studentData];
+    }
+
+    public function deleteStudent($id)
+    {
+        $isDeleted = $this->studentRepository->Delete($id);
+
+        if (!$isDeleted) {
+            return ["message" => "Student not found."];
+        }
+        return ["message" => "Student deleted successfully.", "student" => $id];
     }
 }

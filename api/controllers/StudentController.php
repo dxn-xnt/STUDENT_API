@@ -5,46 +5,44 @@ require_once "config/Database.php";
 
 class StudentController
 {
-    private StudentRepository $studentRepository;
     private StudentService $studentService;
 
     public function __construct()
     {
         $database = Database::getInstance();
         $dbConnection = $database->getConnection();
-        $this->studentRepository = new StudentRepository($dbConnection, "students");
         $this->studentService = new StudentService($dbConnection);
     }
 
     public function getAllStudents(): void
     {
-        $students = $this->studentRepository->GetAllList();
+        $students = $this->studentService->getAllGrades();
         echo json_encode($students);
     }
 
-    public function getStudentById(int $id): void
+    public function getStudentById($id): void
     {
-        $student = $this->studentRepository->GetById($id);
+        $student = $this->studentService->getStudent($id);
         echo json_encode($student);
     }
 
     public function addStudent($student)
     {
-        $this->studentService->addStudent($student);
-        echo "Student Added Successfully";
+        $result = $this->studentService->addStudent($student);
+        echo json_encode($result);
     }
 
     public function updateStudent($id)
     {
         $studentData = json_decode(file_get_contents("php://input"), true);
-        $this->studentService->updateStudent($id, $studentData);
-        echo "Student Updated Successfully";
+        $result = $this->studentService->updateStudent($id, $studentData);
+        echo json_encode($result);
     }
 
-    public function deleteStudent(int $id): void
+    public function deleteStudent($id): void
     {
-        $this->studentRepository->Delete($id);
-        echo "Student Deleted Succesfully";
+        $result = $this->studentService->deleteStudent($id);
+        echo json_encode($result);
     }
 
     public function getAllGrades(): void
